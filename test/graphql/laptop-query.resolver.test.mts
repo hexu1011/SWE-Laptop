@@ -18,13 +18,16 @@ import { type GraphQLRequest } from '@apollo/server';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type Laptop, type LaptopArt } from '../../src/laptop/entity/laptop.entity.js';
+import {
+    type Laptop,
+    type LaptopArt,
+} from '../../src/laptop/entity/laptop.entity.js';
 import { type GraphQLResponseBody } from './graphql.mjs';
 import { baseURL, httpsAgent } from '../constants.mjs';
 
-type BuchDTO = Omit<
-    Buch,
-    'abbildungen' | 'aktualisiert' | 'erzeugt' | 'rabatt'
+type LaptopDTO = Omit<
+    Laptop,
+    'laptopBilden' | 'aktualisiert' | 'erzeugt' | 'rabatt'
 > & {
     rabatt: string;
 };
@@ -34,14 +37,11 @@ type BuchDTO = Omit<
 // -----------------------------------------------------------------------------
 const idVorhanden = '1';
 
-const titelVorhanden = 'Alpha';
-const teilTitelVorhanden = 'a';
-const teilTitelNichtVorhanden = 'abc';
+const markeVorhanden = 'Alpha';
+const teilMarkeVorhanden = 'a';
+const teilMarkeNichtVorhanden = 'abc';
 
-const isbnVorhanden = '978-3-897-22583-1';
-
-const ratingMin = 3;
-const ratingNichtVorhanden = 99;
+const modellnummerVorhanden = 'XPS15-9320';
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -63,23 +63,22 @@ describe('GraphQL Queries', () => {
         });
     });
 
-    test.concurrent('Buch zu vorhandener ID', async () => {
+    test.concurrent('Laptop zu vorhandener ID', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buch(id: "${idVorhanden}") {
+                    laptop(id: "${idVorhanden}") {
                         version
-                        isbn
-                        rating
+                        modellnummer
                         art
                         preis
                         lieferbar
                         datum
                         homepage
-                        schlagwoerter
-                        titel {
-                            titel
+                        merkmale
+                        marke {
+                            marke
                         }
                         rabatt(short: true)
                     }
@@ -97,22 +96,22 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buch } = data.data! as { buch: BuchDTO };
+        const { laptop } = data.data! as { laptop: LaptopDTO };
 
-        expect(buch.titel?.titel).toMatch(/^\w/u);
-        expect(buch.version).toBeGreaterThan(-1);
-        expect(buch.id).toBeUndefined();
+        expect(laptop.marke?.marke).toMatch(/^\w/u);
+        expect(laptop.version).toBeGreaterThan(-1);
+        expect(laptop.id).toBeUndefined();
     });
 
-    test.concurrent('Buch zu nicht-vorhandener ID', async () => {
+    test.concurrent('Laptop zu nicht-vorhandener ID', async () => {
         // given
         const id = '999999';
         const body: GraphQLRequest = {
             query: `
                 {
-                    buch(id: "${id}") {
-                        titel {
-                            titel
+                    laptop(id: "${id}") {
+                        marke {
+                            marke
                         }
                     }
                 }
@@ -126,7 +125,7 @@ describe('GraphQL Queries', () => {
         // then
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buch).toBeNull();
+        expect(data.data!.laptop).toBeNull();
 
         const { errors } = data;
 
@@ -135,24 +134,24 @@ describe('GraphQL Queries', () => {
         const [error] = errors!;
         const { message, path, extensions } = error;
 
-        expect(message).toBe(`Es gibt kein Buch mit der ID ${id}.`);
+        expect(message).toBe(`Es gibt kein Laptop mit der ID ${id}.`);
         expect(path).toBeDefined();
-        expect(path![0]).toBe('buch');
+        expect(path![0]).toBe('laptop');
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test.concurrent('Buch zu vorhandenem Titel', async () => {
+    test.concurrent('Laptop zu vorhandenem Marke', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        titel: "${titelVorhanden}"
+                    laptops(suchkriterien: {
+                        marke: "${markeVorhanden}"
                     }) {
                         art
-                        titel {
-                            titel
+                        marke {
+                            marke
                         }
                     }
                 }
@@ -169,26 +168,26 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { laptops } = data.data! as { laptops: LaptopDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
-        expect(buecher).toHaveLength(1);
+        expect(laptops).not.toHaveLength(0);
+        expect(laptops).toHaveLength(1);
 
-        const [buch] = buecher;
+        const [laptop] = laptops;
 
-        expect(buch!.titel?.titel).toBe(titelVorhanden);
+        expect(laptop!.marke?.marke).toBe(markeVorhanden);
     });
 
-    test.concurrent('Buch zu vorhandenem Teil-Titel', async () => {
+    test.concurrent('Laptop zu vorhandenem Teil-Marke', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        titel: "${teilTitelVorhanden}"
+                    laptops(suchkriterien: {
+                        marke: "${teilMarkeVorhanden}"
                     }) {
-                        titel {
-                            titel
+                        marke {
+                            marke
                         }
                     }
                 }
@@ -205,30 +204,30 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { laptops } = data.data! as { laptops: LaptopDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
+        expect(laptops).not.toHaveLength(0);
 
-        buecher
-            .map((buch) => buch.titel)
-            .forEach((titel) =>
-                expect(titel?.titel?.toLowerCase()).toStrictEqual(
-                    expect.stringContaining(teilTitelVorhanden),
+        laptops
+            .map((laptop) => laptop.marke)
+            .forEach((marke) =>
+                expect(marke?.marke?.toLowerCase()).toStrictEqual(
+                    expect.stringContaining(teilMarkeVorhanden),
                 ),
             );
     });
 
-    test.concurrent('Buch zu nicht vorhandenem Titel', async () => {
+    test.concurrent('Laptop zu nicht vorhandenem Marke', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        titel: "${teilTitelNichtVorhanden}"
+                    laptops(suchkriterien: {
+                        marke: "${teilMarkeNichtVorhanden}"
                     }) {
                         art
-                        titel {
-                            titel
+                        marke {
+                            marke
                         }
                     }
                 }
@@ -258,17 +257,17 @@ describe('GraphQL Queries', () => {
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test.concurrent('Buch zu vorhandener ISBN-Nummer', async () => {
+    test.concurrent('Laptop zu vorhandener Modellnummer', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        isbn: "${isbnVorhanden}"
+                    laptops(suchkriterien: {
+                        modellnummer: "${modellnummerVorhanden}"
                     }) {
-                        isbn
-                        titel {
-                            titel
+                        modellnummer
+                        marke {
+                            marke
                         }
                     }
                 }
@@ -285,112 +284,30 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { laptops } = data.data! as { laptops: LaptopDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
-        expect(buecher).toHaveLength(1);
+        expect(laptops).not.toHaveLength(0);
+        expect(laptops).toHaveLength(1);
 
-        const [buch] = buecher;
-        const { isbn, titel } = buch!;
+        const [laptop] = laptops;
+        const { modellnummer, marke } = laptop!;
 
-        expect(isbn).toBe(isbnVorhanden);
-        expect(titel?.titel).toBeDefined();
+        expect(modellnummer).toBe(modellnummerVorhanden);
+        expect(marke?.marke).toBeDefined();
     });
 
-    test.concurrent('Buecher mit Mindest-"rating"', async () => {
+    test.concurrent('Laptops zur Art "GAMING"', async () => {
         // given
+        const laptopArt: LaptopArt = 'GAMING';
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        rating: ${ratingMin},
-                        titel: "${teilTitelVorhanden}"
-                    }) {
-                        rating
-                        titel {
-                            titel
-                        }
-                    }
-                }
-            `,
-        };
-
-        // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
-
-        // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-
-        expect(data.data).toBeDefined();
-
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
-
-        expect(buecher).not.toHaveLength(0);
-
-        buecher.forEach((buch) => {
-            const { rating, titel } = buch;
-
-            expect(rating).toBeGreaterThanOrEqual(ratingMin);
-            expect(titel?.titel?.toLowerCase()).toStrictEqual(
-                expect.stringContaining(teilTitelVorhanden),
-            );
-        });
-    });
-
-    test.concurrent('Kein Buch zu nicht-vorhandenem "rating"', async () => {
-        // given
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buecher(suchkriterien: {
-                        rating: ${ratingNichtVorhanden}
-                    }) {
-                        titel {
-                            titel
-                        }
-                    }
-                }
-            `,
-        };
-
-        // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
-
-        // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buecher).toBeNull();
-
-        const { errors } = data;
-
-        expect(errors).toHaveLength(1);
-
-        const [error] = errors!;
-        const { message, path, extensions } = error;
-
-        expect(message).toMatch(/^Keine Buecher gefunden:/u);
-        expect(path).toBeDefined();
-        expect(path![0]).toBe('buecher');
-        expect(extensions).toBeDefined();
-        expect(extensions!.code).toBe('BAD_USER_INPUT');
-    });
-
-    test.concurrent('Buecher zur Art "EPUB"', async () => {
-        // given
-        const buchArt: BuchArt = 'EPUB';
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buecher(suchkriterien: {
-                        art: ${buchArt}
+                    laptops(suchkriterien: {
+                        art: ${laptopArt}
                     }) {
                         art
-                        titel {
-                            titel
+                        marke {
+                            marke
                         }
                     }
                 }
@@ -407,29 +324,29 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { laptops } = data.data! as { laptops: LaptopDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
+        expect(laptops).not.toHaveLength(0);
 
-        buecher.forEach((buch) => {
-            const { art, titel } = buch;
+        laptops.forEach((laptop) => {
+            const { art, marke } = laptop;
 
-            expect(art).toBe(buchArt);
-            expect(titel?.titel).toBeDefined();
+            expect(art).toBe(laptopArt);
+            expect(marke?.marke).toBeDefined();
         });
     });
 
-    test.concurrent('Buecher zur einer ungueltigen Art', async () => {
+    test.concurrent('Laptops zur einer ungueltigen Art', async () => {
         // given
-        const buchArt = 'UNGUELTIG';
+        const laptopArt = 'UNGUELTIG';
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
-                        art: ${buchArt}
+                    laptops(suchkriterien: {
+                        art: ${laptopArt}
                     }) {
-                        titel {
-                            titel
+                        marke {
+                            marke
                         }
                     }
                 }
@@ -456,17 +373,17 @@ describe('GraphQL Queries', () => {
         expect(extensions!.code).toBe('GRAPHQL_VALIDATION_FAILED');
     });
 
-    test.concurrent('Buecher mit lieferbar=true', async () => {
+    test.concurrent('laptops mit lieferbar=true', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
+                    laptops(suchkriterien: {
                         lieferbar: true
                     }) {
                         lieferbar
-                        titel {
-                            titel
+                        marke {
+                            marke
                         }
                     }
                 }
@@ -483,15 +400,15 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        const { laptops } = data.data! as { laptops: LaptopDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
+        expect(laptops).not.toHaveLength(0);
 
-        buecher.forEach((buch) => {
-            const { lieferbar, titel } = buch;
+        laptops.forEach((laptop) => {
+            const { lieferbar, marke } = laptop;
 
             expect(lieferbar).toBe(true);
-            expect(titel?.titel).toBeDefined();
+            expect(marke?.marke).toBeDefined();
         });
     });
 });
