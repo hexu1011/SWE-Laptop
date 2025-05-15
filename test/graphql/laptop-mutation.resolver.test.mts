@@ -45,7 +45,7 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Neues Buch', async () => {
+    test('Neues Laptop', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
@@ -53,20 +53,19 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     create(
                         input: {
-                            isbn: "978-1-491-95035-7",
-                            rating: 1,
-                            art: EPUB,
-                            preis: 99.99,
+                            modellnummer: "XPS15-9320",
+                            art: ULTRABOOK,
+                            preis: 9999.99,
                             rabatt: 0.0123,
                             lieferbar: true,
                             datum: "2022-02-28",
                             homepage: "https://create.mutation",
-                            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"],
-                            titel: {
-                                titel: "Titelcreatemutation",
-                                untertitel: "untertitelcreatemutation"
+                            merkmale: ["TOUCHSCREEN", "BACKLIT"],
+                            marke: {
+                                marke: "Markecreatemutation",
+                                reihe: "reihecreatemutation"
                             },
-                            abbildungen: [{
+                            laptopBilden: [{
                                 beschriftung: "Abb. 1",
                                 contentType: "img/png"
                             }]
@@ -95,7 +94,7 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Buch mit ungueltigen Werten neu anlegen', async () => {
+    test('Laptop mit ungueltigen Werten neu anlegen', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
@@ -103,16 +102,15 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     create(
                         input: {
-                            isbn: "falsche-ISBN",
-                            rating: -1,
-                            art: EPUB,
+                            modellnummer: "falsche-modellnummer",
+                            art: ULTRABOOK,
                             preis: -1,
                             rabatt: 2,
                             lieferbar: false,
                             datum: "12345-123-123",
                             homepage: "anyHomepage",
-                            titel: {
-                                titel: "?!"
+                            marke: {
+                                marke: "?!"
                             }
                         }
                     ) {
@@ -122,13 +120,12 @@ describe('GraphQL Mutations', () => {
             `,
         };
         const expectedMsg = [
-            expect.stringMatching(/^isbn /u),
-            expect.stringMatching(/^rating /u),
+            expect.stringMatching(/^modellnummer /u),
             expect.stringMatching(/^preis /u),
             expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
             expect.stringMatching(/^homepage /u),
-            expect.stringMatching(/^titel.titel /u),
+            expect.stringMatching(/^marke.marke /u),
         ];
 
         // when
@@ -157,7 +154,7 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Buch aktualisieren', async () => {
+    test('Laptop aktualisieren', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
@@ -167,15 +164,14 @@ describe('GraphQL Mutations', () => {
                         input: {
                             id: "40",
                             version: 0,
-                            isbn: "978-0-007-09732-6",
-                            rating: 5,
-                            art: HARDCOVER,
+                            modellnummer: "XPS15-9321",
+                            art: ULTRABOOK,
                             preis: 444.44,
                             rabatt: 0.099,
                             lieferbar: false,
                             datum: "2021-04-04",
                             homepage: "https://update.mutation"
-                            schlagwoerter: ["JAVA", "PYTHON"],
+                            merkmale: ["TOUCHSCREEN", "BATTERY"],
                         }
                     ) {
                         version
@@ -200,7 +196,7 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Buch mit ungueltigen Werten aktualisieren', async () => {
+    test('Laptop mit ungueltigen Werten aktualisieren', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const id = '40';
@@ -211,15 +207,14 @@ describe('GraphQL Mutations', () => {
                         input: {
                             id: "${id}",
                             version: 0,
-                            isbn: "falsche-ISBN",
-                            rating: -1,
-                            art: EPUB,
+                            modellnummer: "falsche-ISBN",
+                            art: GAMING,
                             preis: -1,
                             rabatt: 2,
                             lieferbar: false,
                             datum: "12345-123-123",
                             homepage: "anyHomepage",
-                            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"]
+                            merkmale: ["TOUCHSCREEN", "BATTERY"]
                         }
                     ) {
                         version
@@ -228,8 +223,7 @@ describe('GraphQL Mutations', () => {
             `,
         };
         const expectedMsg = [
-            expect.stringMatching(/^isbn /u),
-            expect.stringMatching(/^rating /u),
+            expect.stringMatching(/^modellnummer /u),
             expect.stringMatching(/^preis /u),
             expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
@@ -259,7 +253,7 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Nicht-vorhandenes Buch aktualisieren', async () => {
+    test('Nicht-vorhandenes Laptop aktualisieren', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const id = '999999';
@@ -270,15 +264,14 @@ describe('GraphQL Mutations', () => {
                         input: {
                             id: "${id}",
                             version: 0,
-                            isbn: "978-0-007-09732-6",
-                            rating: 5,
-                            art: EPUB,
+                            modellnummer: "XPS15-9321",
+                            art: GAMING,
                             preis: 99.99,
                             rabatt: 0.099,
                             lieferbar: false,
                             datum: "2021-01-02",
                             homepage: "https://acme.com",
-                            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"]
+                            schlagwoerter: ["TOUCHSCREEN", "BATTERY"]
                         }
                     ) {
                         version
@@ -307,7 +300,7 @@ describe('GraphQL Mutations', () => {
         const { message, path, extensions } = error;
 
         expect(message).toBe(
-            `Es gibt kein Buch mit der ID ${id.toLowerCase()}.`,
+            `Es gibt kein Laptop mit der ID ${id.toLowerCase()}.`,
         );
         expect(path).toBeDefined();
         expect(path![0]).toBe('update');
@@ -316,7 +309,7 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Buch loeschen', async () => {
+    test('Laptop loeschen', async () => {
         // given
         const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
@@ -343,7 +336,7 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    test('Buch loeschen als "user"', async () => {
+    test('Laptop loeschen als "user"', async () => {
         // given
         const authorization = { Authorization: `Bearer ${tokenUser}` };
         const body: GraphQLQuery = {
