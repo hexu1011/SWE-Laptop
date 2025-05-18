@@ -37,9 +37,9 @@ type LaptopDTO = Omit<
 // -----------------------------------------------------------------------------
 const idVorhanden = '1';
 
-const markeVorhanden = 'Alpha';
+const markeVorhanden = 'HP';
 const teilMarkeVorhanden = 'a';
-const teilMarkeNichtVorhanden = 'abc';
+const teilMarkeNichtVorhanden = 'ccc';
 
 const modellnummerVorhanden = 'XPS15-9320';
 
@@ -241,7 +241,7 @@ describe('GraphQL Queries', () => {
         // then
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buecher).toBeNull();
+        expect(data.data!.laptops).toBeNull();
 
         const { errors } = data;
 
@@ -250,9 +250,9 @@ describe('GraphQL Queries', () => {
         const [error] = errors!;
         const { message, path, extensions } = error;
 
-        expect(message).toMatch(/^Keine Buecher gefunden:/u);
+        expect(message).toMatch(/^Keine Laptops gefunden:/u);
         expect(path).toBeDefined();
-        expect(path![0]).toBe('buecher');
+        expect(path![0]).toBe('laptops');
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
