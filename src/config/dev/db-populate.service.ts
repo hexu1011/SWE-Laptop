@@ -42,7 +42,7 @@ import {
  */
 @Injectable()
 export class DbPopulateService implements OnApplicationBootstrap {
-    readonly #tabellen = ['laptop', 'marke', 'laptopBild'];
+    readonly #tabellen = ['laptop', 'marke', 'laptop_bild'];
 
     readonly #datasource: DataSource;
 

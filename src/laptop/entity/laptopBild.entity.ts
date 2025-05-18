@@ -22,7 +22,7 @@ import {
 } from 'typeorm';
 import { Laptop } from './laptop.entity.js';
 
-@Entity()
+@Entity('laptop_bild')
 export class LaptopBild {
     // https://typeorm.io/entities#primary-columns
     // CAVEAT: zuerst @Column() und erst dann @PrimaryGeneratedColumn()

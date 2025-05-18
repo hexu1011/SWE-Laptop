@@ -16,8 +16,8 @@
 -- https://www.postgresql.org/docs/current/sql-droptable.html
 
 DROP TABLE IF EXISTS laptop_datei CASCADE;
-DROP TABLE IF EXISTS laptopBild CASCADE;
-DROP TABLE IF EXISTS marke CASCADE;
+DROP TABLE IF EXISTS laptop_bild CASCADE;
+DROP TABLE IF EXISTS markegCASCADE;
 DROP TABLE IF EXISTS laptop CASCADE;
 
 -- https://www.postgresql.org/docs/current/sql-droptype.html

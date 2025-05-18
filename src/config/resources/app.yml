@@ -36,10 +36,10 @@ db:
 
   #host: localhost
 
-  #username: buch
+  #username: laptop
   #password: p
   #passwordAdmin: p
-  #name: buch
+  #name: laptop
   populate: true
 
 # ==============================================================================

@@ -21,7 +21,7 @@
 import { type LaptopArt } from '../entity/laptop.entity.js';
 
 /**
- * Typdefinition für `find` in `buch-read.service` und `QueryBuilder.build()`.
+ * Typdefinition für `find` in `laptop-read.service` und `QueryBuilder.build()`.
  */
 export interface Suchkriterien {
     readonly modellnummer?: string;

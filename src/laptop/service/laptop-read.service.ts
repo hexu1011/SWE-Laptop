@@ -33,7 +33,7 @@ import { type Suchkriterien } from './suchkriterien.js';
  * Typdefinition für `findById`
  */
 export type FindByIdParams = {
-    /** ID des gesuchten Buchs */
+    /** ID des gesuchten Laptops */
     readonly id: number;
     /** Sollen die Abbildungen mitgeladen werden? */
     readonly mitLaptopBilden?: boolean;
@@ -127,7 +127,7 @@ export class LaptopReadService {
     async findFileByLaptopId(
         laptopId: number,
     ): Promise<Readonly<LaptopDatei> | undefined> {
-        this.#logger.debug('findFileByLaptopId: buchId=%s', laptopId);
+        this.#logger.debug('findFileByLaptopId: laptopId=%s', laptopId);
         const laptopDatei = await this.#dateiRepo
             .createQueryBuilder('laptop_datei')
             .where('laptop_id = :id', { id: laptopId })

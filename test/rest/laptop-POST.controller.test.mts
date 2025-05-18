@@ -182,7 +182,7 @@ describe('POST /rest', () => {
 
             const { message, statusCode } = data;
 
-            expect(message).toStrictEqual(expect.stringContaining('ISBN'));
+            expect(message).toStrictEqual(expect.stringContaining('MODELLNr'));
             expect(statusCode).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
         });
 

@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -- docker compose exec postgres bash
--- psql --dbname=buch --username=buch --file=/scripts/create-table-buch.sql
+-- psql --dbname=laptop --username=laptop --file=/scripts/create-table-laptop.sql
 
 -- text statt varchar(n):
 -- "There is no performance difference among these three types, apart from a few extra CPU cycles
@@ -24,7 +24,7 @@
 -- Indexe mit pgAdmin auflisten: "Query Tool" verwenden mit
 --  SELECT   tablename, indexname, indexdef, tablespace
 --  FROM     pg_indexes
---  WHERE    schemaname = 'buch'
+--  WHERE    schemaname = 'laptop'
 --  ORDER BY tablename, indexname;
 
 -- https://www.postgresql.org/docs/devel/app-psql.html
@@ -80,13 +80,13 @@ CREATE TABLE IF NOT EXISTS marke (
 ) TABLESPACE laptopspace;
 
 
-CREATE TABLE IF NOT EXISTS laptopBild (
+CREATE TABLE IF NOT EXISTS laptop_bild (
     id              integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY USING INDEX TABLESPACE laptopspace,
     beschriftung    text NOT NULL,
     content_type    text NOT NULL,
     laptop_id         integer NOT NULL REFERENCES laptop
 ) TABLESPACE laptopspace;
-CREATE INDEX IF NOT EXISTS laptopBild_laptop_id_idx ON laptopBild(laptop_id) TABLESPACE laptopspace;
+CREATE INDEX IF NOT EXISTS laptop_bild_laptop_id_idx ON laptop_bild(laptop_id) TABLESPACE laptopspace;
 
 CREATE TABLE IF NOT EXISTS laptop_datei (
     id              integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY USING INDEX TABLESPACE laptopspace,
