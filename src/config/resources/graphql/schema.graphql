@@ -108,7 +108,7 @@ input LaptopInput {
   homepage: String
   merkmale: [String]
   marke: MarkeInput!
-  laptopNilden: [LaptopBildInput!]
+  laptopBilden: [LaptopBildInput!]
 }
 
 type CreatePayload {

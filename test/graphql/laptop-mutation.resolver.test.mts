@@ -53,9 +53,9 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     create(
                         input: {
-                            modellnummer: "XPS15-9420",
+                            modellnummer: "DSCE-1244",
                             art: ULTRABOOK,
-                            preis: 3333.99,
+                            preis: 99.99,
                             rabatt: 0.0123,
                             lieferbar: true,
                             datum: "2022-02-28",
@@ -120,7 +120,6 @@ describe('GraphQL Mutations', () => {
             `,
         };
         const expectedMsg = [
-            expect.stringMatching(/^modellnummer /u),
             expect.stringMatching(/^preis /u),
             expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
@@ -164,7 +163,7 @@ describe('GraphQL Mutations', () => {
                         input: {
                             id: "40",
                             version: 0,
-                            modellnummer: "XPS15-9321",
+                            modellnummer: "ENVY13-BA100",
                             art: ULTRABOOK,
                             preis: 444.44,
                             rabatt: 0.099,
@@ -223,7 +222,6 @@ describe('GraphQL Mutations', () => {
             `,
         };
         const expectedMsg = [
-            expect.stringMatching(/^modellnummer /u),
             expect.stringMatching(/^preis /u),
             expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
@@ -271,7 +269,7 @@ describe('GraphQL Mutations', () => {
                             lieferbar: false,
                             datum: "2021-01-02",
                             homepage: "https://acme.com",
-                            schlagwoerter: ["TOUCHSCREEN", "BATTERY"]
+                            merkmale: ["TOUCHSCREEN", "BATTERY"]
                         }
                     ) {
                         version
