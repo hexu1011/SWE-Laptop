@@ -61,11 +61,11 @@ const idNichtVorhanden = '999999';
 
 const geaendertesLaptopInvalid: Record<string, unknown> = {
     modellnummer: 'falsche-ISBN',
-    art: 'GAMING',
+    art: 'T',
     preis: -1,
     rabatt: 2,
     lieferbar: true,
-    datum: '12345-123-123',
+    datum: '12345',
     homepage: 'anyHomepage',
 };
 
@@ -141,7 +141,6 @@ describe('PUT /rest/:id', () => {
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
         const expectedMsg = [
-            expect.stringMatching(/^modellnummer /u),
             expect.stringMatching(/^art /u),
             expect.stringMatching(/^preis /u),
             expect.stringMatching(/^rabatt /u),

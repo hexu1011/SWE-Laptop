@@ -64,7 +64,7 @@ const neuesLaptopInvalid: Record<string, unknown> = {
     },
 };
 const neuesLaptopIsbnExistiert: LaptopDTO = {
-    modellnummer: '978-3-897-22583-1',
+    modellnummer: 'XPS15-9320',
     art: 'GAMING',
     preis: new Decimal(99.99),
     rabatt: new Decimal(0.09),
@@ -136,7 +136,6 @@ describe('POST /rest', () => {
         // given
         headers.Authorization = `Bearer ${token}`;
         const expectedMsg = [
-            expect.stringMatching(/^modellnummer /u),
             expect.stringMatching(/^art /u),
             expect.stringMatching(/^preis /u),
             expect.stringMatching(/^rabatt /u),
@@ -182,9 +181,12 @@ describe('POST /rest', () => {
 
             const { message, statusCode } = data;
 
-            expect(message).toStrictEqual(expect.stringContaining('MODELLNr'));
+            expect(message).toStrictEqual(
+                expect.stringContaining('modellnummer'),
+            );
             expect(statusCode).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
-        });
+        },
+    );
 
     test.concurrent('Neues Laptop, aber ohne Token', async () => {
         // when

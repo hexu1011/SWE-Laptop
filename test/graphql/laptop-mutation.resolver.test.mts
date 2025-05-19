@@ -53,9 +53,9 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     create(
                         input: {
-                            modellnummer: "XPS15-9320",
+                            modellnummer: "XPS15-9420",
                             art: ULTRABOOK,
-                            preis: 9999.99,
+                            preis: 3333.99,
                             rabatt: 0.0123,
                             lieferbar: true,
                             datum: "2022-02-28",

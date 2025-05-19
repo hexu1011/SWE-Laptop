@@ -27,8 +27,8 @@ import { type ErrorResponse } from './error-response.mjs';
 // -----------------------------------------------------------------------------
 const markeVorhanden = 'a';
 const markeNichtVorhanden = 'xx';
-const preisMax = 33.5;
-const merkmaleVorhanden = 'javascript';
+const preisMax = 9999.9;
+const merkmaleVorhanden = 'backlit';
 const merkmaleNichtVorhanden = 'csharp';
 
 // -----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ describe('GET /rest', () => {
         });
     });
 
-    test.concurrent('Alle Buecher', async () => {
+    test.concurrent('Alle Laptops', async () => {
         // given
 
         // when
