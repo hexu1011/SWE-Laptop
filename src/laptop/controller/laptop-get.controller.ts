@@ -176,7 +176,7 @@ export class LaptopGetController {
         @Req() req: Request,
         @Headers('If-None-Match') version: string | undefined,
         @Res() res: Response,
-    ): Promise<Response<Laptop | undefined>>{
+    ): Promise<Response<Laptop | undefined>> {
         this.#logger.debug('getById: id=%s, version=%s', id, version);
 
         if (req.accepts(['json', 'html']) === false) {
@@ -274,7 +274,9 @@ export class LaptopGetController {
         const id = Number(idStr);
         if (!Number.isInteger(id)) {
             this.#logger.debug('getById: not isInteger()');
-            throw new NotFoundException(`Die Laptop-ID ${idStr} ist ungueltig.`);
+            throw new NotFoundException(
+                `Die Laptop-ID ${idStr} ist ungueltig.`,
+            );
         }
 
         const laptopFile = await this.#service.findFileByLaptopId(id);

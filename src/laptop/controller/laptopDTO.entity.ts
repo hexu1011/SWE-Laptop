@@ -149,7 +149,9 @@ export class LaptopDtoOhneRef {
 
     @IsOptional()
     @ArrayUnique()
-    @ApiProperty({ example: ['TOUCHSCREEN', 'BACKLIT', 'LIGHTWEIGHT', 'BATTERY'] })
+    @ApiProperty({
+        example: ['TOUCHSCREEN', 'BACKLIT', 'LIGHTWEIGHT', 'BATTERY'],
+    })
     readonly merkmale: string[] | undefined;
 }
 

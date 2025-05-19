@@ -97,7 +97,9 @@ export class LaptopReadService {
             .buildId({ id, mitLaptopBilden })
             .getOne();
         if (laptop === null) {
-            throw new NotFoundException(`Es gibt kein Laptop mit der ID ${id}.`);
+            throw new NotFoundException(
+                `Es gibt kein Laptop mit der ID ${id}.`,
+            );
         }
         if (laptop.merkmale === null) {
             laptop.merkmale = [];
@@ -137,7 +139,10 @@ export class LaptopReadService {
             return;
         }
 
-        this.#logger.debug('findFileByLaptopId: filename=%s', laptopDatei.filename);
+        this.#logger.debug(
+            'findFileByLaptopId: filename=%s',
+            laptopDatei.filename,
+        );
         return laptopDatei;
     }
 
@@ -191,11 +196,12 @@ export class LaptopReadService {
         const queryBuilder = this.#queryBuilder.build({}, pageable);
         const laptops = await queryBuilder.getMany();
         if (laptops.length === 0) {
-            throw new NotFoundException(`Ungueltige Seite "${pageable.number}"`);
+            throw new NotFoundException(
+                `Ungueltige Seite "${pageable.number}"`,
+            );
         }
         const totalElements = await queryBuilder.getCount();
         return this.#createSlice(laptops, totalElements);
-
     }
 
     #createSlice(laptops: Laptop[], totalElements: number) {

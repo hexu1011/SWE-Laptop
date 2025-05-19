@@ -166,7 +166,9 @@ export class LaptopWriteService {
         );
         if (id === undefined) {
             this.#logger.debug('update: Keine gueltige ID');
-            throw new NotFoundException(`Es gibt kein Laptop mit der ID ${id}.`);
+            throw new NotFoundException(
+                `Es gibt kein Laptop mit der ID ${id}.`,
+            );
         }
 
         const validateResult = await this.#validateUpdate(laptop, id, version);
