@@ -21,17 +21,15 @@ actor Gast
 actor Admin
 actor Kunde
 
-rectangle buch {
-    Gast --> (Buch suchen)
-    Admin --> (Buch suchen)
-    Admin --> (Buch anlegen)
-    Admin --> (Buch ändern)
-    Admin --> (Buch löschen)
-    Kunde --> (Buch suchen)
-    Kunde --> (Buch anlegen)
-    Kunde --> (Buch ändern)
+rectangle laptop {
+    Gast --> (Laptop suchen)
+    Admin --> (Laptop suchen)
+    Admin --> (Laptop anlegen)
+    Admin --> (Laptop ändern)
+    Admin --> (Laptop löschen)
+    Kunde --> (Laptop suchen)
+    Kunde --> (Laptop anlegen)
+    Kunde --> (Laptop ändern)
 }
-
-footer (c) Jürgen Zimmermann
 
 @enduml

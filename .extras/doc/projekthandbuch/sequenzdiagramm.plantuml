@@ -19,14 +19,12 @@
 
 actor Gast
 
-boundary BuchGetController
-control BuchReadService
-database buch
+boundary LaptopGetController
+control LaptopReadService
+database laptop
 
-Gast -> BuchGetController : GET / getById()
-BuchGetController -> BuchReadService: findById()
-BuchReadService -> buch: [TypeORM]
-
-footer (c) Jürgen Zimmermann
+Gast -> LaptopGetController : GET / getById()
+LaptopGetController -> LaptopReadService: findById()
+LaptopReadService -> laptop: [TypeORM]
 
 @enduml

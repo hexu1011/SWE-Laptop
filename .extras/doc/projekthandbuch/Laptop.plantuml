@@ -36,47 +36,44 @@ package typeorm {
   hide UpdateDateColumn circle
 }
 
-package buch.entity {
-  class "type BuchArt = 'KINDLE' | 'DRUCKAUSGABE'" as BuchArt
-  hide BuchArt circle
+package laptop.entity {
+  class "type LaptopArt = 'ULTRABOOK' | 'GAMING' | 'BUSINESS'" as LaptopArt
+  hide LaptopArt circle
 
-  class Buch <<entity>> <<@Entity>> {
+  class Laptop <<entity>> <<@Entity>> {
     @Column() @PrimaryColumn() readonly id: number
     @Column() readonly version: number
-    @Column() readonly isbn: string
-    @Column() readonly rating: number
-    @Column() readonly art: BuchArt
+    @Column() readonly modellnummer: string
+    @Column() readonly art: LaptopArt
     @Column() readonly preis: number
     @Column() readonly rabatt: number
     @Column() readonly lieferbar: boolean
     @Column() readonly datum: Date
     @Column() readonly homepage?: string
-    @Column() readonly schlagwoerter?: string
+    @Column() readonly merkmale?: string
     @CreateDateColumn() readonly erzeugt: Date
     @UpdateDateColumn() readonly aktualisiert: Date
   }
 
-  class Titel <<entity>> <<@Entity>> {
+  class Marke <<entity>> <<@Entity>> {
     @Column() @PrimaryColumn() readonly id: number
-    @Column() readonly titel: string
-    @Column() readonly untertitel?: string
+    @Column() readonly marke: string
+    @Column() readonly reihe?: string
   }
 
-  class Abbildung <<entity>> <<@Entity>> {
+  class LaptopBild <<entity>> <<@Entity>> {
     @Column() @PrimaryColumn() readonly id: number
     @Column() readonly beschriftung: string
     @Column() readonly contentType?: string
   }
 
-  Buch *--> "1" Titel : @OneToOne() \ntitel
-  Buch *--> "*" Abbildung : @OneToMany() \nabbildungen
+  Laptop *--> "1" Marke : @OneToOne() \nmarke
+  Laptop *--> "*" LaptopBild : @OneToMany() \nlaptopBilden
 
-  Buch .right.> Entity
-  Buch .right.> BuchArt
+  Laptop .right.> Entity
+  Laptop .right.> LaptopArt
 }
 
 hide empty members
-
-footer (c) Jürgen Zimmermann
 
 @enduml

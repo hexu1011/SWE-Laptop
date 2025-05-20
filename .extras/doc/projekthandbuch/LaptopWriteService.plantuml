@@ -1,0 +1,86 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Anwendungskern
+
+interface Promise<T>
+
+package @nestjs/common {
+  class "@Injectable" as Injectable
+  hide Injectable circle
+}
+
+package typeorm {
+  class Repository<T>
+}
+
+package @nestjs/typeorm {
+  class "@InjectRepository" as InjectRepository
+  hide InjectRepository circle
+}
+
+package mail {
+  class MailService
+}
+
+package laptop {
+  package entity {
+    class Laptop
+  }
+
+  package service #DDDDDD {
+    class LaptopInvalid
+    class MarkeExists
+    class ModellnrExists
+    class VersionInvalid
+    class VersionOutdated
+
+    class LaptopWriteService << control >> <<@Injectable()>> {
+      + async create(laptop: Laptop): Promise<string|LaptopInvalid|MarkeExists|ModellnrExists>
+      + async update(id: number, laptop: Laptop, version: string): Promise<number|LaptopInvalid|MarkeExists|ModellnrExists|VersionInvalid|VersionOutdated>
+      + async delete(id: number): Promise<boolean>
+    }
+
+    LaptopWriteService o--> "1" LaptopValidationService: validationService
+    LaptopWriteService o--> "1" LaptopReadService: readService
+    LaptopWriteService o--> "1" Repository: @InjectRepository repo
+    LaptopWriteService o--> "1" MailService: mailService
+
+    LaptopWriteService .up.> Injectable
+    LaptopWriteService .up.> InjectRepository
+
+    LaptopWriteService .up.> Promise
+    LaptopWriteService ..> Laptop
+    LaptopWriteService .up.> LaptopInvalid
+    LaptopWriteService .up.> MarkeExists
+    LaptopWriteService .up.> ModellnrExists
+    LaptopWriteService .up.> VersionInvalid
+    LaptopWriteService .up.> VersionOutdated
+
+    LaptopInvalid .up[hidden].> Laptop
+    Laptop .up[hidden].> Promise
+    Laptop .up[hidden].> Injectable
+    Laptop .up[hidden].> InjectRepository
+    MarkeExists .up[hidden].> BLaptopuch
+    LaptopValidationService .[hidden].> Repository
+    LaptopValidationService .[hidden].> MailService
+  }
+}
+
+hide empty members
+
+@enduml

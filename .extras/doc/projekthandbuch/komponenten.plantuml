@@ -25,12 +25,12 @@ actor GraphQLClient
 node "Nest" {
   [RequestLoggerMiddleware]
 
-  [BuchController]
-  [BuchResolver]
+  [LaptopController]
+  [LaptopResolver]
 
-  [BuchService]
+  [LaptopService]
 
-  [Repository<Buch>]
+  [Repository<Laptop>]
 
   [MailService]
 }
@@ -48,10 +48,10 @@ cloud {
     [nodemailer]
 }
 
-database "DB buch" {
-    [Tabelle buch]
-    [Tabelle titel]
-    [Tabelle abbildung]
+database "DB laptop" {
+    [Tabelle laptop]
+    [Tabelle marke]
+    [Tabelle laptopBild]
 }
 
 node {
@@ -65,27 +65,25 @@ node {
 RESTClient ~~> [RequestLoggerMiddleware]
 GraphQLClient ~~> [RequestLoggerMiddleware]
 
-[RequestLoggerMiddleware] ~~> [BuchController]
-[RequestLoggerMiddleware] ~~> [BuchResolver]
+[RequestLoggerMiddleware] ~~> [LaptopController]
+[RequestLoggerMiddleware] ~~> [LaptopResolver]
 
-[BuchController] ..> [BuchService]
-[BuchResolver] ..> [BuchService]
-[BuchService] ..> [Repository<Buch>]
+[LaptopController] ..> [LaptopService]
+[LaptopResolver] ..> [LaptopService]
+[LaptopService] ..> [Repository<Laptop>]
 
-[Repository<Buch>] ~~> [TypeORM]
-[TypeORM] ~~> [Tabelle buch]
-[TypeORM] ~~> [Tabelle titel]
-[TypeORM] ~~> [Tabelle abbildung]
+[Repository<Laptop>] ~~> [TypeORM]
+[TypeORM] ~~> [Tabelle laptop]
+[TypeORM] ~~> [Tabelle marke]
+[TypeORM] ~~> [Tabelle laptopBild]
 
-[BuchController] ..> [nest-keycloak-connect]
+[LaptopController] ..> [nest-keycloak-connect]
 [nest-keycloak-connect] ~~> [Keycloak]
 
-[BuchService] ..> [MailService]
+[LaptopService] ..> [MailService]
 [MailService] ~~> [nodemailer]
 [nodemailer] ~~> [Mailserver]
 
 [MailService] ~[hidden]~> [nest-keycloak-connect]
-
-footer (c) Jürgen Zimmermann
 
 @enduml

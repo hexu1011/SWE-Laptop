@@ -43,46 +43,44 @@ package nest-keycloak-connect {
   hide Roles circle
 }
 
-package buch #DDDDDD {
+package laptop #DDDDDD {
   package entity #FFFFFF {
-    class Buch <<entity>>
+    class Laptop <<entity>>
   }
 
   package service #FFFFFF {
-    class BuchWriteService << control >>
+    class LaptopWriteService << control >>
   }
 
-  class "type BuchDTO = Omit<Buch, 'abbildungen' | 'aktualisiert' | 'erzeugt'" as BuchDTO
-  hide BuchDTO circle
+  class "type LaptopDTO = Omit<Laptop, 'laptopBilden' | 'aktualisiert' | 'erzeugt'" as LaptopDTO
+  hide LaptopDTO circle
 
     interface IdInput {
         id: number
     }
 
-  class BuchMutationResolver << control >> << @Resolver() >> << @UseGuards() >> << @UseInterceptors() >> {
-    + @Mutation() @Roles() async create(@Args() buchDTO: BuchDTO): Promise<number>
-    + @Mutation() @Roles() async update(@Args() buchDTO: BuchDTO): Promise<number>
+  class LaptopMutationResolver << control >> << @Resolver() >> << @UseGuards() >> << @UseInterceptors() >> {
+    + @Mutation() @Roles() async create(@Args() laptopDTO: LaptopDTO): Promise<number>
+    + @Mutation() @Roles() async update(@Args() laptopDTO: LaptopDTO): Promise<number>
     + @Mutation() @Roles() async delete(@Args() id: IdInput): Promise<boolean>
   }
 
-  BuchMutationResolver o-down-> "1" BuchWriteService : service
+  LaptopMutationResolver o-down-> "1" LaptopWriteService : service
 
-  BuchMutationResolver ..> Buch
-  BuchMutationResolver ..> BuchDTO
-  BuchMutationResolver ..> IdInput
-  BuchDTO .up.> Buch
-  BuchMutationResolver ..> Promise
-  BuchMutationResolver ..> Resolver
+  LaptopMutationResolver ..> Laptop
+  LaptopMutationResolver ..> LaptopDTO
+  LaptopMutationResolver ..> IdInput
+  LaptopDTO .up.> Laptop
+  LaptopMutationResolver ..> Promise
+  LaptopMutationResolver ..> Resolver
 
-  BuchMutationResolver .up.> AuthGuard
-  BuchMutationResolver .up.> Roles
+  LaptopMutationResolver .up.> AuthGuard
+  LaptopMutationResolver .up.> Roles
 
-  BuchDTO .[hidden].> Promise
-  BuchDTO .[hidden].> Resolver
+  LaptopDTO .[hidden].> Promise
+  LaptopDTO .[hidden].> Resolver
 }
 
 hide empty members
-
-footer (c) Juergen Zimmermann
 
 @enduml
