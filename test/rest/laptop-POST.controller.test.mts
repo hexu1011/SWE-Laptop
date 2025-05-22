@@ -63,7 +63,7 @@ const neuesLaptopInvalid: Record<string, unknown> = {
         reihe: 'Reiheinvalid',
     },
 };
-const neuesLaptopIsbnExistiert: LaptopDTO = {
+const neuesLaptopModellnrExistiert: LaptopDTO = {
     modellnummer: 'XPS15-9320',
     art: 'GAMING',
     preis: new Decimal(99.99),
@@ -172,7 +172,7 @@ describe('POST /rest', () => {
             // when
             const response: AxiosResponse<ErrorResponse> = await client.post(
                 '',
-                neuesLaptopIsbnExistiert,
+                neuesLaptopModellnrExistiert,
                 { headers },
             );
 

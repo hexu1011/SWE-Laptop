@@ -89,7 +89,7 @@ export class LaptopWriteController {
      * dass damit das neu angelegte Laptop abgerufen werden kann.
      *
      * Falls Constraints verletzt sind, wird der Statuscode `400` (`Bad Request`)
-     * gesetzt und genauso auch wenn der Titel oder die ISBN-Nummer bereits
+     * gesetzt und genauso auch wenn der Marke oder die Modell-Nummer bereits
      * existieren.
      *
      * @param laptopDTO JSON-Daten für ein Laptop im Request-Body.
@@ -191,7 +191,7 @@ export class LaptopWriteController {
      * required`) gesetzt; und falls sie nicht korrekt ist, der Statuscode `412`
      * (`Precondition failed`). Falls Constraints verletzt sind, wird der
      * Statuscode `400` (`Bad Request`) gesetzt und genauso auch wenn der neue
-     * Titel oder die neue ISBN-Nummer bereits existieren.
+     * Marke oder die neue Modell-Nummer bereits existieren.
      *
      * @param laptopDTO Laptopdaten im Body des Request-Objekts.
      * @param id Pfad-Paramater für die ID.

@@ -24,7 +24,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
  */
 
 /**
- * Exception-Klasse für eine bereits existierende ISBN-Nummer.
+ * Exception-Klasse für eine bereits existierende Modellnr-Nummer.
  */
 export class ModellnrExistsException extends HttpException {
     readonly modellnummer: string | undefined;

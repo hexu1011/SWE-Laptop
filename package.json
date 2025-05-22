@@ -33,7 +33,7 @@
     "leasot": "leasot --exit-nicely src/**/*.ts",
     "madge": "madge --circular src/main.ts",
     "madge:svg": "madge --image dependencies.svg src/main.ts",
-    "prettier": "prettier --cache --write \"src/**/*.ts\" \"__tests__/**/*.ts\"",
+    "prettier": "prettier --cache --write \"src/**/*.ts\" \"__tests__/**/*.mts\"",
     "prettier:check": "prettier --cache --check \"src/**/*.ts\" \"__tests__/**/*.ts\"",
     "revealjs": "asciidoctor-revealjs .extras/doc/folien/folien.adoc",
     "snyk:auth": "echo https://app.snyk.io/account && snyk auth",

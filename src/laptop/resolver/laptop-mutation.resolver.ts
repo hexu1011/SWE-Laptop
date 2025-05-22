@@ -173,8 +173,8 @@ export class LaptopMutationResolver {
 
     // #errorMsgCreateLaptop(err: CreateError) {
     //     switch (err.type) {
-    //         case 'IsbnExists': {
-    //             return `Die ISBN ${err.isbn} existiert bereits`;
+    //         case 'ModellnummerExists': {
+    //             return `Die Modellnummer ${err.modellnummer} existiert bereits`;
     //         }
     //         default: {
     //             return 'Unbekannter Fehler';
